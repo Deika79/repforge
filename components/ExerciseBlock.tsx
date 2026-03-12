@@ -35,7 +35,21 @@ export default function ExerciseBlock({
 
     fetch(`/api/exercises/last?exercise=${encodeURIComponent(name)}&userId=${userId}`)
       .then((res) => res.json())
-      .then(setLast)
+      .then((data) => {
+
+        if (!data) return
+
+        setLast(data)
+
+        // autocompletar sets con última sesión
+        sets.forEach((_, i) => {
+
+          updateSet(name, i, "weight", data.weight)
+          updateSet(name, i, "reps", data.reps)
+
+        })
+
+      })
 
   }, [name])
 
