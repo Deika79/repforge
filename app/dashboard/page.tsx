@@ -61,7 +61,10 @@ export default function Dashboard() {
           Ver historial
         </button>
 
-        <button className="w-full bg-purple-600 py-3 rounded">
+        <button
+          onClick={() => window.location.href="/stats"}
+          className="w-full bg-purple-600 py-3 rounded"
+        >
           Estadísticas
         </button>
 

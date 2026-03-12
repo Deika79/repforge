@@ -84,9 +84,12 @@ export default function History() {
 
               <div key={i} className="mb-3">
 
-                <div className="font-semibold">
-                  {ex.name}
-                </div>
+            <a
+              href={`/exercise/${encodeURIComponent(ex.name)}`}
+              className="font-semibold text-green-400"
+            >
+              {ex.name}
+            </a>
 
                 {ex.sets.map((s, j) => (
 
