@@ -78,7 +78,7 @@ export default function NewWorkout() {
   const volume = calculateVolume()
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white p-6">
+    <main className="min-h-screen bg-gray-900 text-white p-6 overflow-y-auto">
 
       <h1 className="text-3xl font-bold mb-6">
         Nuevo entrenamiento

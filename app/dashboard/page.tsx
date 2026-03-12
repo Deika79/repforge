@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 type User = {
   _id: string
@@ -9,13 +10,18 @@ type User = {
 
 export default function Dashboard() {
 
+  const router = useRouter()
+
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
 
     const userId = localStorage.getItem("userId")
 
-    if (!userId) return
+    if (!userId) {
+      router.push("/")
+      return
+    }
 
     fetch("/api/users")
       .then((res) => res.json())
@@ -24,6 +30,7 @@ export default function Dashboard() {
         const found = data.find((u: User) => u._id === userId)
 
         setUser(found)
+
       })
 
   }, [])
@@ -32,38 +39,39 @@ export default function Dashboard() {
 
     return (
       <main className="min-h-screen flex items-center justify-center text-white bg-gray-900">
-        Cargando usuario...
+        Cargando...
       </main>
     )
+
   }
 
   return (
 
     <main className="min-h-screen bg-gray-900 text-white p-6">
 
-      <h1 className="text-3xl font-bold mb-8">
-        Dashboard - {user.name}
+      <h1 className="text-3xl font-bold mb-10 text-center">
+        {user.name}
       </h1>
 
-      <div className="space-y-4 max-w-md">
+      <div className="flex flex-col gap-6 max-w-md mx-auto">
 
         <button
-          onClick={() => window.location.href="/workout/new"}
-          className="w-full bg-green-600 py-3 rounded"
+          onClick={() => router.push("/workout/new")}
+          className="bg-green-600 py-5 rounded text-xl"
         >
           Nuevo entrenamiento
         </button>
 
         <button
-          onClick={() => window.location.href="/history"}
-          className="w-full bg-blue-600 py-3 rounded"
+          onClick={() => router.push("/history")}
+          className="bg-blue-600 py-5 rounded text-xl"
         >
-          Ver historial
+          Historial
         </button>
 
         <button
-          onClick={() => window.location.href="/stats"}
-          className="w-full bg-purple-600 py-3 rounded"
+          onClick={() => router.push("/stats")}
+          className="bg-purple-600 py-5 rounded text-xl"
         >
           Estadísticas
         </button>
@@ -73,4 +81,5 @@ export default function Dashboard() {
     </main>
 
   )
+
 }
