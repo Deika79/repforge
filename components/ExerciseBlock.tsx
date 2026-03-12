@@ -29,6 +29,13 @@ export default function ExerciseBlock({
         {name}
       </h2>
 
+      {/* encabezado */}
+
+      <div className="flex gap-4 text-sm text-gray-400 mb-2 ml-20">
+        <span className="w-28">kg</span>
+        <span className="w-28">reps</span>
+      </div>
+
       {sets.map((set, i) => (
 
         <div
@@ -42,7 +49,6 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            placeholder="kg"
             value={set.weight}
             onChange={(e) =>
               updateSet(
@@ -57,7 +63,6 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            placeholder="reps"
             value={set.reps}
             onChange={(e) =>
               updateSet(
