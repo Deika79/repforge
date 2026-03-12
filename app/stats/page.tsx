@@ -10,9 +10,12 @@ import {
   CartesianGrid
 } from "recharts"
 
+import { estimate1RM } from "@/utils/strength"
+
 type Set = {
   weight: number
   reps: number
+  rir?: number
 }
 
 type Exercise = {
@@ -64,7 +67,7 @@ export default function Stats() {
   }
 
   // -------------------------
-  // Volumen por usuario
+  // Volumen total por usuario
   // -------------------------
 
   function volumePerUser() {
@@ -119,6 +122,36 @@ export default function Stats() {
   }
 
   // -------------------------
+  // Estimación 1RM
+  // -------------------------
+
+  function getBest1RM() {
+
+    const best: Record<string, number> = {}
+
+    workouts.forEach((w) => {
+
+      w.exercises.forEach((ex) => {
+
+        ex.sets.forEach((s) => {
+
+          const rm = estimate1RM(s.weight, s.reps)
+
+          if (!best[ex.name] || rm > best[ex.name]) {
+            best[ex.name] = rm
+          }
+
+        })
+
+      })
+
+    })
+
+    return best
+
+  }
+
+  // -------------------------
   // Volumen semanal
   // -------------------------
 
@@ -148,6 +181,7 @@ export default function Stats() {
   const volumes = volumePerUser()
   const prs = getPRsPerUser()
   const weekly = weeklyVolume()
+  const best1RM = getBest1RM()
 
   return (
 
@@ -207,6 +241,28 @@ export default function Stats() {
                 </div>
 
               ))}
+
+          </div>
+
+        ))}
+
+      </div>
+
+      {/* ---------------- */}
+      {/* Estimación 1RM */}
+      {/* ---------------- */}
+
+      <div className="mb-10">
+
+        <h2 className="text-xl font-bold mb-4">
+          Estimación 1RM
+        </h2>
+
+        {Object.entries(best1RM).map(([ex, rm]) => (
+
+          <div key={ex}>
+
+            {ex}: {rm} kg
 
           </div>
 
