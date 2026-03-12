@@ -39,9 +39,12 @@ export default function Dashboard() {
 
       <div className="space-y-4 max-w-md">
 
-        <button className="w-full bg-green-600 py-3 rounded">
-          Nuevo entrenamiento
-        </button>
+      <button
+        onClick={() => window.location.href="/workout/new"}
+        className="w-full bg-green-600 py-3 rounded"
+      >
+        Nuevo entrenamiento
+      </button>
 
         <button className="w-full bg-blue-600 py-3 rounded">
           Ver historial
