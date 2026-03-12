@@ -1,6 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid
+} from "recharts"
 
 type Set = {
   weight: number
@@ -52,7 +60,12 @@ export default function Stats() {
     })
 
     return total
+
   }
+
+  // -------------------------
+  // Volumen por usuario
+  // -------------------------
 
   function volumePerUser() {
 
@@ -67,21 +80,31 @@ export default function Stats() {
     })
 
     return volumes
+
   }
 
-  function getPRs() {
+  // -------------------------
+  // PR por usuario
+  // -------------------------
 
-    const prs: Record<string, number> = {}
+  function getPRsPerUser() {
+
+    const prs: Record<string, Record<string, number>> = {}
 
     workouts.forEach((w) => {
+
+      if (!prs[w.userId]) prs[w.userId] = {}
 
       w.exercises.forEach((ex) => {
 
         ex.sets.forEach((s) => {
 
-          if (!prs[ex.name] || s.weight > prs[ex.name]) {
+          if (
+            !prs[w.userId][ex.name] ||
+            s.weight > prs[w.userId][ex.name]
+          ) {
 
-            prs[ex.name] = s.weight
+            prs[w.userId][ex.name] = s.weight
 
           }
 
@@ -92,20 +115,51 @@ export default function Stats() {
     })
 
     return prs
+
+  }
+
+  // -------------------------
+  // Volumen semanal
+  // -------------------------
+
+  function weeklyVolume() {
+
+    const weeks: Record<string, number> = {}
+
+    workouts.forEach((w) => {
+
+      const date = new Date(w.date)
+
+      const week = `${date.getFullYear()}-${Math.ceil(date.getDate() / 7)}`
+
+      const volume = calculateVolume(w.exercises)
+
+      weeks[week] = (weeks[week] || 0) + volume
+
+    })
+
+    return Object.entries(weeks).map(([week, volume]) => ({
+      week,
+      volume
+    }))
+
   }
 
   const volumes = volumePerUser()
-  const prs = getPRs()
+  const prs = getPRsPerUser()
+  const weekly = weeklyVolume()
 
   return (
 
     <main className="min-h-screen bg-gray-900 text-white p-6">
 
-      <h1 className="text-3xl font-bold mb-8">
+      <h1 className="text-3xl font-bold mb-10">
         Estadísticas
       </h1>
 
-      {/* Volumen por usuario */}
+      {/* ---------------- */}
+      {/* Volumen total */}
+      {/* ---------------- */}
 
       <div className="mb-10">
 
@@ -125,19 +179,34 @@ export default function Stats() {
 
       </div>
 
-      {/* PR por ejercicio */}
+      {/* ---------------- */}
+      {/* PR por usuario */}
+      {/* ---------------- */}
 
-      <div>
+      <div className="mb-10">
 
         <h2 className="text-xl font-bold mb-4">
-          PR por ejercicio
+          PR por usuario
         </h2>
 
-        {Object.entries(prs).map(([exercise, weight]) => (
+        {users.map((u) => (
 
-          <div key={exercise} className="mb-2">
+          <div key={u._id} className="mb-6">
 
-            {exercise}: {weight} kg
+            <div className="font-semibold mb-2">
+              {u.name}
+            </div>
+
+            {prs[u._id] &&
+              Object.entries(prs[u._id]).map(([ex, w]) => (
+
+                <div key={ex} className="text-sm">
+
+                  {ex}: {w} kg
+
+                </div>
+
+              ))}
 
           </div>
 
@@ -145,6 +214,38 @@ export default function Stats() {
 
       </div>
 
+      {/* ---------------- */}
+      {/* Volumen semanal */}
+      {/* ---------------- */}
+
+      <div>
+
+        <h2 className="text-xl font-bold mb-4">
+          Progresión volumen semanal
+        </h2>
+
+        <LineChart width={600} height={300} data={weekly}>
+
+          <CartesianGrid stroke="#444" />
+
+          <XAxis dataKey="week" />
+
+          <YAxis />
+
+          <Tooltip />
+
+          <Line
+            type="monotone"
+            dataKey="volume"
+            stroke="#22c55e"
+          />
+
+        </LineChart>
+
+      </div>
+
     </main>
+
   )
+
 }
