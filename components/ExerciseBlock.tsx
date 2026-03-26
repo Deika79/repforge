@@ -26,11 +26,11 @@ export default function ExerciseBlock({
 }: Props) {
 
   const [last, setLast] = useState<{weight:number,reps:number}|null>(null)
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
 
     const userId = localStorage.getItem("userId")
-
     if (!userId) return
 
     fetch(`/api/exercises/last?exercise=${encodeURIComponent(name)}&userId=${userId}`)
@@ -41,17 +41,22 @@ export default function ExerciseBlock({
 
         setLast(data)
 
-        // autocompletar sets con última sesión
-        sets.forEach((_, i) => {
+        // SOLO inicializa una vez
+        if (!initialized) {
 
-          updateSet(name, i, "weight", data.weight)
-          updateSet(name, i, "reps", data.reps)
+          sets.forEach((_, i) => {
 
-        })
+            updateSet(name, i, "weight", data.weight)
+            updateSet(name, i, "reps", data.reps)
+
+          })
+
+          setInitialized(true)
+        }
 
       })
 
-  }, [name])
+  }, [name, sets, initialized])
 
   return (
 
@@ -86,27 +91,45 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            value={set.weight}
+            value={set.weight || ""}
+            placeholder="kg"
             onChange={(e) =>
-              updateSet(name, i, "weight", Number(e.target.value))
+              updateSet(
+                name,
+                i,
+                "weight",
+                Number(e.target.value)
+              )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black"
           />
 
           <input
             type="number"
-            value={set.reps}
+            value={set.reps || ""}
+            placeholder="reps"
             onChange={(e) =>
-              updateSet(name, i, "reps", Number(e.target.value))
+              updateSet(
+                name,
+                i,
+                "reps",
+                Number(e.target.value)
+              )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black"
           />
 
           <input
             type="number"
-            value={set.rir || 0}
+            value={set.rir || ""}
+            placeholder="rir"
             onChange={(e) =>
-              updateSet(name, i, "rir", Number(e.target.value))
+              updateSet(
+                name,
+                i,
+                "rir",
+                Number(e.target.value)
+              )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black"
           />
