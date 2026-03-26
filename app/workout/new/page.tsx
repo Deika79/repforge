@@ -25,9 +25,9 @@ export default function NewWorkout() {
     template.forEach((ex) => {
 
       obj[ex.name] = Array.from({ length: ex.sets }, () => ({
-        weight: 0,
-        reps: 0,
-        rir: 0
+        weight: null,
+        reps: null,
+        rir: null
       }))
 
     })
