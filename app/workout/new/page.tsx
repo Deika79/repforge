@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import ExerciseBlock from "@/components/ExerciseBlock"
 import { workoutTemplates } from "@/utils/workoutTemplates"
+import BackButton from "@/components/BackButton"
 
 export default function NewWorkout() {
 
@@ -12,6 +13,9 @@ export default function NewWorkout() {
     workoutTemplates[type as keyof typeof workoutTemplates]
 
   const [exercisesData, setExercisesData] = useState<any>({})
+
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   // reconstruir ejercicios cuando cambie el tipo
   useEffect(() => {
@@ -49,9 +53,7 @@ export default function NewWorkout() {
     Object.values(exercisesData).forEach((sets: any) => {
 
       sets.forEach((s: any) => {
-
         total += s.weight * s.reps
-
       })
 
     })
@@ -61,6 +63,10 @@ export default function NewWorkout() {
   }
 
   async function saveWorkout() {
+
+    if (saving || saved) return
+
+    setSaving(true)
 
     const userId = localStorage.getItem("userId")
 
@@ -82,7 +88,13 @@ export default function NewWorkout() {
       })
     })
 
-    alert("Entrenamiento guardado")
+    setSaving(false)
+    setSaved(true)
+
+    // redirige automáticamente al dashboard
+    setTimeout(() => {
+      window.location.href = "/dashboard"
+    }, 1500)
 
   }
 
@@ -91,6 +103,8 @@ export default function NewWorkout() {
   return (
 
     <main className="min-h-screen bg-gray-900 text-white p-6 overflow-y-auto">
+
+      <BackButton />
 
       <h1 className="text-3xl font-bold mb-6">
         Nuevo entrenamiento
@@ -152,11 +166,24 @@ export default function NewWorkout() {
         Volumen total: {volume} kg
       </div>
 
+      {/* botón PRO */}
+
       <button
         onClick={saveWorkout}
-        className="mt-6 bg-green-600 px-6 py-3 rounded"
+        disabled={saving}
+        className={`mt-6 px-6 py-3 rounded w-full text-lg ${
+          saving
+            ? "bg-gray-600"
+            : saved
+            ? "bg-green-800"
+            : "bg-green-600"
+        }`}
       >
-        Guardar entrenamiento
+        {saving
+          ? "Guardando..."
+          : saved
+          ? "Guardado ✅"
+          : "Guardar entrenamiento"}
       </button>
 
     </main>
