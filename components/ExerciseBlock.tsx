@@ -63,7 +63,7 @@ export default function ExerciseBlock({
 
       {sets.map((set, i) => (
 
-        <div key={i} className="flex items-center gap-4 mb-3">
+        <div key={i} className="flex items-center gap-4 mb-4">
 
           <span className="w-20 text-gray-300">
             Serie {i + 1}
@@ -71,59 +71,75 @@ export default function ExerciseBlock({
 
           {/* PESO */}
 
-          <input
-            type="number"
-            value={set.weight === -1 ? "" : set.weight}
-            placeholder={last ? String(last.weight) : ""}
-            onChange={(e) =>
-              updateSet(
-                name,
-                i,
-                "weight",
-                e.target.value === "" ? -1 : Number(e.target.value)
-              )
-            }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
-          />
+          <div className="flex flex-col w-24">
+            <span className="text-xs text-gray-500 h-4">
+              {last ? last.weight : ""}
+            </span>
+
+            <input
+              type="number"
+              value={set.weight === 0 ? "" : set.weight}
+              onChange={(e) =>
+                updateSet(
+                  name,
+                  i,
+                  "weight",
+                  e.target.value === "" ? 0 : Number(e.target.value)
+                )
+              }
+              className="px-3 py-3 rounded bg-white text-black"
+            />
+          </div>
 
           {/* REPS */}
 
-          <input
-            type="number"
-            value={set.reps === -1 ? "" : set.reps}
-            placeholder={last ? String(last.reps) : ""}
-            onChange={(e) =>
-              updateSet(
-                name,
-                i,
-                "reps",
-                e.target.value === "" ? -1 : Number(e.target.value)
-              )
-            }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
-          />
+          <div className="flex flex-col w-24">
+            <span className="text-xs text-gray-500 h-4">
+              {last ? last.reps : ""}
+            </span>
+
+            <input
+              type="number"
+              value={set.reps === 0 ? "" : set.reps}
+              onChange={(e) =>
+                updateSet(
+                  name,
+                  i,
+                  "reps",
+                  e.target.value === "" ? 0 : Number(e.target.value)
+                )
+              }
+              className="px-3 py-3 rounded bg-white text-black"
+            />
+          </div>
 
           {/* RIR */}
 
-          <input
-            type="number"
-            value={set.rir === -1 || set.rir === undefined ? "" : set.rir}
-            placeholder="rir"
-            onChange={(e) =>
-              updateSet(
-                name,
-                i,
-                "rir",
-                e.target.value === "" ? -1 : Number(e.target.value)
-              )
-            }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
-          />
+          <div className="flex flex-col w-24">
+            <span className="text-xs text-gray-500 h-4">
+              -
+            </span>
+
+            <input
+              type="number"
+              value={set.rir === 0 || set.rir === undefined ? "" : set.rir}
+              onChange={(e) =>
+                updateSet(
+                  name,
+                  i,
+                  "rir",
+                  e.target.value === "" ? 0 : Number(e.target.value)
+                )
+              }
+              className="px-3 py-3 rounded bg-white text-black"
+            />
+          </div>
 
         </div>
 
       ))}
 
     </div>
+
   )
 }
