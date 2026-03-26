@@ -84,7 +84,7 @@ export default function ExerciseBlock({
                   name,
                   i,
                   "weight",
-                  e.target.value === "" ? 0 : Number(e.target.value)
+                  Number(e.target.value)
                 )
               }
               className="px-3 py-3 rounded bg-white text-black"
@@ -106,7 +106,7 @@ export default function ExerciseBlock({
                   name,
                   i,
                   "reps",
-                  e.target.value === "" ? 0 : Number(e.target.value)
+                  Number(e.target.value)
                 )
               }
               className="px-3 py-3 rounded bg-white text-black"
@@ -128,7 +128,7 @@ export default function ExerciseBlock({
                   name,
                   i,
                   "rir",
-                  e.target.value === "" ? 0 : Number(e.target.value)
+                  Number(e.target.value)
                 )
               }
               className="px-3 py-3 rounded bg-white text-black"
@@ -140,6 +140,5 @@ export default function ExerciseBlock({
       ))}
 
     </div>
-
   )
 }

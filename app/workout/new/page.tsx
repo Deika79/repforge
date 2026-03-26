@@ -25,9 +25,9 @@ export default function NewWorkout() {
     template.forEach((ex) => {
 
       obj[ex.name] = Array.from({ length: ex.sets }, () => ({
-        weight: -1,
-        reps: -1,
-        rir: -1,
+        weight: 0,
+        reps: 0,
+        rir: 0,
       }))
 
     })
@@ -90,14 +90,12 @@ export default function NewWorkout() {
       })
     })
 
-    // guardar datos para pantalla final
     localStorage.setItem("lastVolume", volume.toString())
     localStorage.setItem("lastExercises", exercises.length.toString())
 
     setSaving(false)
     setSaved(true)
 
-    // ir a pantalla resumen
     setTimeout(() => {
       window.location.href = "/workout/complete"
     }, 800)
@@ -115,8 +113,6 @@ export default function NewWorkout() {
       <h1 className="text-3xl font-bold mb-6">
         Nuevo entrenamiento
       </h1>
-
-      {/* selector tipo */}
 
       <div className="mb-6">
 
@@ -155,8 +151,6 @@ export default function NewWorkout() {
 
       </div>
 
-      {/* ejercicios */}
-
       {template.map((ex) => (
 
         <ExerciseBlock
@@ -171,8 +165,6 @@ export default function NewWorkout() {
       <div className="mt-6 text-lg font-bold">
         Volumen total: {volume} kg
       </div>
-
-      {/* botón PRO */}
 
       <button
         onClick={saveWorkout}
