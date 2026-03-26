@@ -73,14 +73,14 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            value={set.weight === 0 ? "" : set.weight}
+            value={set.weight === -1 ? "" : set.weight}
             placeholder={last ? String(last.weight) : ""}
             onChange={(e) =>
               updateSet(
                 name,
                 i,
                 "weight",
-                e.target.value === "" ? 0 : Number(e.target.value)
+                e.target.value === "" ? -1 : Number(e.target.value)
               )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
@@ -90,14 +90,14 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            value={set.reps === 0 ? "" : set.reps}
+            value={set.reps === -1 ? "" : set.reps}
             placeholder={last ? String(last.reps) : ""}
             onChange={(e) =>
               updateSet(
                 name,
                 i,
                 "reps",
-                e.target.value === "" ? 0 : Number(e.target.value)
+                e.target.value === "" ? -1 : Number(e.target.value)
               )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
@@ -107,14 +107,14 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            value={set.rir === 0 || set.rir === undefined ? "" : set.rir}
+            value={set.rir === -1 || set.rir === undefined ? "" : set.rir}
             placeholder="rir"
             onChange={(e) =>
               updateSet(
                 name,
                 i,
                 "rir",
-                e.target.value === "" ? 0 : Number(e.target.value)
+                e.target.value === "" ? -1 : Number(e.target.value)
               )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
