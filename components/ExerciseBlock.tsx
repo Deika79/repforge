@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react"
 
 type Set = {
-  weight: number
-  reps: number
-  rir?: number
+  weight: number | null
+  reps: number | null
+  rir?: number | null
 }
 
 type Props = {
@@ -25,8 +25,7 @@ export default function ExerciseBlock({
   updateSet,
 }: Props) {
 
-  const [last, setLast] = useState<{weight:number,reps:number}|null>(null)
-  const [initialized, setInitialized] = useState(false)
+  const [last, setLast] = useState<{ weight: number; reps: number } | null>(null)
 
   useEffect(() => {
 
@@ -36,24 +35,8 @@ export default function ExerciseBlock({
     fetch(`/api/exercises/last?exercise=${encodeURIComponent(name)}&userId=${userId}`)
       .then((res) => res.json())
       .then((data) => {
-
         if (!data) return
-
         setLast(data)
-
-        // inicializar UNA VEZ
-        if (!initialized) {
-
-          sets.forEach((_, i) => {
-
-            updateSet(name, i, "weight", 0)
-            updateSet(name, i, "reps", 0)
-
-          })
-
-          setInitialized(true)
-        }
-
       })
 
   }, [name])
@@ -80,10 +63,7 @@ export default function ExerciseBlock({
 
       {sets.map((set, i) => (
 
-        <div
-          key={i}
-          className="flex items-center gap-4 mb-3"
-        >
+        <div key={i} className="flex items-center gap-4 mb-3">
 
           <span className="w-20 text-gray-300">
             Serie {i + 1}
@@ -93,8 +73,8 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            value={set.weight || ""}
-            placeholder={last ? String(last.weight) : "kg"}
+            value={set.weight ?? ""}
+            placeholder={last ? String(last.weight) : ""}
             onChange={(e) =>
               updateSet(
                 name,
@@ -103,15 +83,15 @@ export default function ExerciseBlock({
                 Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder-gray-400"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500 font-semibold"
           />
 
           {/* REPS */}
 
           <input
             type="number"
-            value={set.reps || ""}
-            placeholder={last ? String(last.reps) : "reps"}
+            value={set.reps ?? ""}
+            placeholder={last ? String(last.reps) : ""}
             onChange={(e) =>
               updateSet(
                 name,
@@ -120,14 +100,14 @@ export default function ExerciseBlock({
                 Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder-gray-400"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500 font-semibold"
           />
 
           {/* RIR */}
 
           <input
             type="number"
-            value={set.rir || ""}
+            value={set.rir ?? ""}
             placeholder="rir"
             onChange={(e) =>
               updateSet(
@@ -137,7 +117,7 @@ export default function ExerciseBlock({
                 Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder-gray-400"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
           />
 
         </div>
@@ -145,6 +125,5 @@ export default function ExerciseBlock({
       ))}
 
     </div>
-
   )
 }
