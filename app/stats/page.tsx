@@ -12,6 +12,7 @@ import {
 } from "recharts"
 
 import { estimate1RM } from "@/utils/strength"
+import BackButton from "@/components/BackButton"
 
 type Set = {
   weight: number
@@ -67,7 +68,7 @@ export default function Stats() {
   }
 
   // -------------------------
-  // Agrupar por tipo (push/pull/legs)
+  // Agrupar por tipo
   // -------------------------
 
   function volumeByType(type: string) {
@@ -100,9 +101,7 @@ export default function Stats() {
             !prs[w.userId][ex.name] ||
             s.weight > prs[w.userId][ex.name]
           ) {
-
             prs[w.userId][ex.name] = s.weight
-
           }
 
         })
@@ -149,6 +148,9 @@ export default function Stats() {
   return (
 
     <main className="min-h-screen bg-gray-900 text-white p-6">
+
+      {/* 🔙 botón atrás */}
+      <BackButton />
 
       <h1 className="text-3xl font-bold mb-10">
         Estadísticas
@@ -223,7 +225,7 @@ export default function Stats() {
               Progresión {type}
             </h2>
 
-            <div className="w-full h-64">
+            <div className="w-full h-64 bg-gray-800 p-2 rounded">
 
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data}>

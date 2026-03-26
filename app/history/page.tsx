@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import BackButton from "@/components/BackButton"
 
 type Set = {
   weight: number
@@ -22,6 +24,7 @@ type Workout = {
 export default function History() {
 
   const [workouts, setWorkouts] = useState<Workout[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     fetchWorkouts()
@@ -51,6 +54,9 @@ export default function History() {
 
   return (
     <main className="min-h-screen bg-gray-900 text-white p-6">
+
+      {/* 🔙 botón atrás */}
+      <BackButton />
 
       <h1 className="text-3xl font-bold mb-8">
         Historial de entrenamientos
@@ -84,12 +90,15 @@ export default function History() {
 
               <div key={i} className="mb-3">
 
-            <a
-              href={`/exercise/${encodeURIComponent(ex.name)}`}
-              className="font-semibold text-green-400"
-            >
-              {ex.name}
-            </a>
+                {/* navegación sin recargar */}
+                <button
+                  onClick={() =>
+                    router.push(`/exercise/${encodeURIComponent(ex.name)}`)
+                  }
+                  className="font-semibold text-green-400"
+                >
+                  {ex.name}
+                </button>
 
                 {ex.sets.map((s, j) => (
 
