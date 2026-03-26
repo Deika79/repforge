@@ -8,8 +8,10 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid
+  CartesianGrid,
+  ResponsiveContainer
 } from "recharts"
+import BackButton from "@/components/BackButton"
 
 type Set = {
   weight: number
@@ -71,27 +73,38 @@ export default function ExercisePage() {
 
     <main className="min-h-screen bg-gray-900 text-white p-6">
 
+      {/* 🔙 botón atrás */}
+      <BackButton />
+
       <h1 className="text-3xl font-bold mb-6">
         {exerciseName}
       </h1>
 
-      <LineChart width={600} height={300} data={data}>
+      <div className="w-full h-64 bg-gray-800 p-2 rounded">
 
-        <CartesianGrid stroke="#444" />
+        <ResponsiveContainer width="100%" height="100%">
 
-        <XAxis dataKey="date" />
+          <LineChart data={data}>
 
-        <YAxis />
+            <CartesianGrid stroke="#444" />
 
-        <Tooltip />
+            <XAxis dataKey="date" />
 
-        <Line
-          type="monotone"
-          dataKey="weight"
-          stroke="#22c55e"
-        />
+            <YAxis />
 
-      </LineChart>
+            <Tooltip />
+
+            <Line
+              type="monotone"
+              dataKey="weight"
+              stroke="#22c55e"
+            />
+
+          </LineChart>
+
+        </ResponsiveContainer>
+
+      </div>
 
     </main>
 

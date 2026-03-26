@@ -75,6 +75,8 @@ export default function NewWorkout() {
       sets: exercisesData[name]
     }))
 
+    const volume = calculateVolume()
+
     await fetch("/api/workouts", {
       method: "POST",
       headers: {
@@ -88,13 +90,17 @@ export default function NewWorkout() {
       })
     })
 
+    // guardar datos para pantalla final
+    localStorage.setItem("lastVolume", volume.toString())
+    localStorage.setItem("lastExercises", exercises.length.toString())
+
     setSaving(false)
     setSaved(true)
 
-    // redirige automáticamente al dashboard
+    // ir a pantalla resumen
     setTimeout(() => {
-      window.location.href = "/dashboard"
-    }, 1500)
+      window.location.href = "/workout/complete"
+    }, 800)
 
   }
 
