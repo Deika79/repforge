@@ -41,13 +41,13 @@ export default function ExerciseBlock({
 
         setLast(data)
 
-        // SOLO inicializa una vez
+        // inicializar UNA VEZ
         if (!initialized) {
 
           sets.forEach((_, i) => {
 
-            updateSet(name, i, "weight", data.weight)
-            updateSet(name, i, "reps", data.reps)
+            updateSet(name, i, "weight", 0)
+            updateSet(name, i, "reps", 0)
 
           })
 
@@ -56,7 +56,7 @@ export default function ExerciseBlock({
 
       })
 
-  }, [name, sets, initialized])
+  }, [name])
 
   return (
 
@@ -89,10 +89,12 @@ export default function ExerciseBlock({
             Serie {i + 1}
           </span>
 
+          {/* PESO */}
+
           <input
             type="number"
             value={set.weight || ""}
-            placeholder="kg"
+            placeholder={last ? String(last.weight) : "kg"}
             onChange={(e) =>
               updateSet(
                 name,
@@ -101,13 +103,15 @@ export default function ExerciseBlock({
                 Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder-gray-400"
           />
+
+          {/* REPS */}
 
           <input
             type="number"
             value={set.reps || ""}
-            placeholder="reps"
+            placeholder={last ? String(last.reps) : "reps"}
             onChange={(e) =>
               updateSet(
                 name,
@@ -116,8 +120,10 @@ export default function ExerciseBlock({
                 Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder-gray-400"
           />
+
+          {/* RIR */}
 
           <input
             type="number"
@@ -131,7 +137,7 @@ export default function ExerciseBlock({
                 Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder-gray-400"
           />
 
         </div>
