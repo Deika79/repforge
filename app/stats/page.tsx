@@ -7,7 +7,8 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid
+  CartesianGrid,
+  ResponsiveContainer
 } from "recharts"
 
 import { estimate1RM } from "@/utils/strength"
@@ -63,27 +64,20 @@ export default function Stats() {
     })
 
     return total
-
   }
 
   // -------------------------
-  // Volumen total por usuario
+  // Agrupar por tipo (push/pull/legs)
   // -------------------------
 
-  function volumePerUser() {
+  function volumeByType(type: string) {
 
-    const volumes: Record<string, number> = {}
-
-    workouts.forEach((w) => {
-
-      const volume = calculateVolume(w.exercises)
-
-      volumes[w.userId] = (volumes[w.userId] || 0) + volume
-
-    })
-
-    return volumes
-
+    return workouts
+      .filter((w) => w.workoutType === type)
+      .map((w) => ({
+        date: new Date(w.date).toLocaleDateString(),
+        volume: calculateVolume(w.exercises)
+      }))
   }
 
   // -------------------------
@@ -118,11 +112,10 @@ export default function Stats() {
     })
 
     return prs
-
   }
 
   // -------------------------
-  // Estimación 1RM
+  // 1RM estimado
   // -------------------------
 
   function getBest1RM() {
@@ -148,39 +141,9 @@ export default function Stats() {
     })
 
     return best
-
   }
 
-  // -------------------------
-  // Volumen semanal
-  // -------------------------
-
-  function weeklyVolume() {
-
-    const weeks: Record<string, number> = {}
-
-    workouts.forEach((w) => {
-
-      const date = new Date(w.date)
-
-      const week = `${date.getFullYear()}-${Math.ceil(date.getDate() / 7)}`
-
-      const volume = calculateVolume(w.exercises)
-
-      weeks[week] = (weeks[week] || 0) + volume
-
-    })
-
-    return Object.entries(weeks).map(([week, volume]) => ({
-      week,
-      volume
-    }))
-
-  }
-
-  const volumes = volumePerUser()
   const prs = getPRsPerUser()
-  const weekly = weeklyVolume()
   const best1RM = getBest1RM()
 
   return (
@@ -190,28 +153,6 @@ export default function Stats() {
       <h1 className="text-3xl font-bold mb-10">
         Estadísticas
       </h1>
-
-      {/* ---------------- */}
-      {/* Volumen total */}
-      {/* ---------------- */}
-
-      <div className="mb-10">
-
-        <h2 className="text-xl font-bold mb-4">
-          Volumen total por usuario
-        </h2>
-
-        {users.map((u) => (
-
-          <div key={u._id} className="mb-2">
-
-            {u.name}: {volumes[u._id] || 0} kg
-
-          </div>
-
-        ))}
-
-      </div>
 
       {/* ---------------- */}
       {/* PR por usuario */}
@@ -235,9 +176,7 @@ export default function Stats() {
               Object.entries(prs[u._id]).map(([ex, w]) => (
 
                 <div key={ex} className="text-sm">
-
                   {ex}: {w} kg
-
                 </div>
 
               ))}
@@ -249,7 +188,7 @@ export default function Stats() {
       </div>
 
       {/* ---------------- */}
-      {/* Estimación 1RM */}
+      {/* 1RM */}
       {/* ---------------- */}
 
       <div className="mb-10">
@@ -261,9 +200,7 @@ export default function Stats() {
         {Object.entries(best1RM).map(([ex, rm]) => (
 
           <div key={ex}>
-
             {ex}: {rm} kg
-
           </div>
 
         ))}
@@ -271,34 +208,50 @@ export default function Stats() {
       </div>
 
       {/* ---------------- */}
-      {/* Volumen semanal */}
+      {/* GRÁFICAS POR TIPO */}
       {/* ---------------- */}
 
-      <div>
+      {["push", "pull", "legs"].map((type) => {
 
-        <h2 className="text-xl font-bold mb-4">
-          Progresión volumen semanal
-        </h2>
+        const data = volumeByType(type)
 
-        <LineChart width={600} height={300} data={weekly}>
+        return (
 
-          <CartesianGrid stroke="#444" />
+          <div key={type} className="mb-10">
 
-          <XAxis dataKey="week" />
+            <h2 className="text-xl font-bold mb-4 capitalize">
+              Progresión {type}
+            </h2>
 
-          <YAxis />
+            <div className="w-full h-64">
 
-          <Tooltip />
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
 
-          <Line
-            type="monotone"
-            dataKey="volume"
-            stroke="#22c55e"
-          />
+                  <CartesianGrid stroke="#444" />
 
-        </LineChart>
+                  <XAxis dataKey="date" />
 
-      </div>
+                  <YAxis />
+
+                  <Tooltip />
+
+                  <Line
+                    type="monotone"
+                    dataKey="volume"
+                    stroke="#22c55e"
+                  />
+
+                </LineChart>
+              </ResponsiveContainer>
+
+            </div>
+
+          </div>
+
+        )
+
+      })}
 
     </main>
 
