@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react"
 
 type Set = {
-  weight: number | null
-  reps: number | null
-  rir?: number | null
+  weight: number
+  reps: number
+  rir?: number
 }
 
 type Props = {
@@ -73,48 +73,48 @@ export default function ExerciseBlock({
 
           <input
             type="number"
-            value={set.weight ?? ""}
+            value={set.weight === 0 ? "" : set.weight}
             placeholder={last ? String(last.weight) : ""}
             onChange={(e) =>
               updateSet(
                 name,
                 i,
                 "weight",
-                Number(e.target.value)
+                e.target.value === "" ? 0 : Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500 font-semibold"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
           />
 
           {/* REPS */}
 
           <input
             type="number"
-            value={set.reps ?? ""}
+            value={set.reps === 0 ? "" : set.reps}
             placeholder={last ? String(last.reps) : ""}
             onChange={(e) =>
               updateSet(
                 name,
                 i,
                 "reps",
-                Number(e.target.value)
+                e.target.value === "" ? 0 : Number(e.target.value)
               )
             }
-            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500 font-semibold"
+            className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
           />
 
           {/* RIR */}
 
           <input
             type="number"
-            value={set.rir ?? ""}
+            value={set.rir === 0 || set.rir === undefined ? "" : set.rir}
             placeholder="rir"
             onChange={(e) =>
               updateSet(
                 name,
                 i,
                 "rir",
-                Number(e.target.value)
+                e.target.value === "" ? 0 : Number(e.target.value)
               )
             }
             className="w-24 px-3 py-3 rounded bg-white text-black placeholder:text-gray-500"
