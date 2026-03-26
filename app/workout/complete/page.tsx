@@ -1,13 +1,24 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 export default function WorkoutComplete() {
 
   const router = useRouter()
 
-  const volume = localStorage.getItem("lastVolume")
-  const exercises = localStorage.getItem("lastExercises")
+  const [volume, setVolume] = useState<string | null>(null)
+  const [exercises, setExercises] = useState<string | null>(null)
+
+  useEffect(() => {
+
+    const v = localStorage.getItem("lastVolume")
+    const e = localStorage.getItem("lastExercises")
+
+    setVolume(v)
+    setExercises(e)
+
+  }, [])
 
   return (
 
@@ -20,11 +31,11 @@ export default function WorkoutComplete() {
       <div className="mb-6">
 
         <div className="text-lg mb-2">
-          Volumen: {volume} kg
+          Volumen: {volume ?? "..."} kg
         </div>
 
         <div className="text-lg">
-          Ejercicios: {exercises}
+          Ejercicios: {exercises ?? "..."}
         </div>
 
       </div>
