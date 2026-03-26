@@ -27,7 +27,7 @@ export default function NewWorkout() {
       obj[ex.name] = Array.from({ length: ex.sets }, () => ({
         weight: null,
         reps: null,
-        rir: null
+        rir: null,
       }))
 
     })
